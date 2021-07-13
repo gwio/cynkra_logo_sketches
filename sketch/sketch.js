@@ -14,6 +14,7 @@ let cnykraRnd = 4;
 let accentColor = true;
 let accentHue = 189;
 let noiseSeedVal = 123456;
+let gradient = 20;
 
 function preload() {
   img = loadImage('logo.png');
@@ -71,6 +72,11 @@ function onSeed(value_) {
   redraw();
 }
 
+function onGradient(value_) {
+  gradient = value_;
+  redraw();
+}
+
 //--------------------------------------
 
 function setup() {
@@ -82,6 +88,7 @@ function setup() {
   gui.addRange('NoiseSteps', 0.001, 0.02, 0.013, 0.001, onNoiseSteps);
   gui.addHTML('Color Variation', "");
   gui.addRange('Color', 1, 360, 22, 1, onColor);
+  gui.addRange('Gradient', 1, 200, 1, 1, onGradient);
   gui.addRange('SaturationFac', 1, 100, 100, 1, onSat);
   gui.addRange('BrigthnessFac', 1, 100, 90, 1, onBright);
   gui.addHTML('cynkra Block', "");
@@ -151,7 +158,7 @@ function drawShape(x_, y_, current_, max_, scale_) {
         xoff += xincrement;
         //print(random);
       } else if (rnd > cnykraRnd) {
-        fill(mainColor + (nColor), ((nColor + 0.5) * sat), 100 - constrain(((nColor + 0.5) * bright), 20, 100));
+        fill(mainColor + (nColor * gradient), ((nColor + 0.5) * sat), 100 - constrain(((nColor + 0.5) * bright), 20, 100));
         xoff += xincrement;
       } else {
         fill(212, 83, 72);
