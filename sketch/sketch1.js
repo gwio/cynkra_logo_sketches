@@ -1,20 +1,21 @@
 let width = window.innerWidth;
 let height = window.innerHeight;
-let incre = width / 12;
+let incre = width / 9;
 let img;
 let xoff = 0.0;
-let xincrement = 0.013;
-let steps = 4;
+let xincrement = 0.015;
+let steps = 5;
 
 
-let sat = 65;
-let bright = 55;
-let mainColor = 213;
-let cnykraRnd = 4;
-let accentColor = true;
+let sat = 17;
+let bright = 6;
+let mainColor = 196;
+let cnykraRnd = 53;
+let accentColor = false;
 let accentHue = 189;
 let noiseSeedVal = 123456;
-let gradient = 20;
+let gradient = 15;
+let spacing = 0.8;
 
 function preload() {
   img = loadImage('logo.png');
@@ -77,25 +78,31 @@ function onGradient(value_) {
   redraw();
 }
 
+function onSpacing(value_) {
+  spacing = value_;
+  redraw();
+}
+
 //--------------------------------------
 
 function setup() {
   createCanvas(width, height);
   var gui = QuickSettings.create(width - 300, 0, 'gui');
 
-  gui.addRange('Tiles', 3, 50, 12, 1, onTiles);
-  gui.addRange('GridSteps', 2, 10, 4, 1, onSteps);
-  gui.addRange('NoiseSteps', 0.001, 0.02, 0.013, 0.001, onNoiseSteps);
+  gui.addRange('Tiles', 3, 50, 9, 1, onTiles);
+  gui.addRange('GridSteps', 2, 10, 5, 1, onSteps);
+  gui.addRange('Spacing', 0.5, 1.1, 0.84, 0.01, onSpacing);
   gui.addHTML('Color Variation', "");
-  gui.addRange('Color', 1, 360, 22, 1, onColor);
-  gui.addRange('Gradient', 1, 200, 1, 1, onGradient);
-  gui.addRange('SaturationFac', 1, 100, 100, 1, onSat);
-  gui.addRange('BrigthnessFac', 1, 100, 90, 1, onBright);
+  gui.addRange('Color', 1, 360, 196, 1, onColor);
+  gui.addRange('Gradient', 1, 200, 15, 1, onGradient);
+  gui.addRange('SaturationFac', 0, 100, 17, 1, onSat);
+  gui.addRange('BrigthnessFac', 0, 100, 6, 1, onBright);
   gui.addHTML('cynkra Block', "");
-  gui.addRange('random %', 1, 100, 4, 1, onCynkra);
-  gui.addBoolean('Accent', true, onAccent);
-  gui.addRange('AccentColor', 0, 360, 189, 1, onAccentColor);
+  gui.addRange('random %', 0, 100, 53, 1, onCynkra);
+  gui.addBoolean('Accent', false, onAccent);
+  gui.addRange('AccentColor',0, 360, 189, 1, onAccentColor);
   gui.addNumber('NoiseSeed', 0, 999999, 123456, 1, onSeed);
+  gui.addRange('NoiseSteps', 0.001, 0.02, 0.015, 0.001, onNoiseSteps);
 
   background(255);
   colorMode(HSB, 360, 100, 100);
@@ -158,12 +165,12 @@ function drawShape(x_, y_, current_, max_, scale_) {
         xoff += xincrement;
         //print(random);
       } else if (rnd > cnykraRnd) {
-        fill(mainColor + (nColor * gradient), ((nColor + 0.5) * sat), 100 - constrain(((nColor + 0.5) * bright), 20, 100));
+        fill(mainColor + (nColor * gradient), ((nColor + 0.5) * (sat*2)) , 100- ((nColor + 0.5) * (bright*2)) );
         xoff += xincrement;
       } else {
         fill(212, 83, 72);
       }
-      rect(pos.x + (i * rectSize), pos.y + (j * rectSize), rectSize * 0.8, rectSize * 0.8);
+      rect(pos.x + (i * rectSize), pos.y + (j * rectSize), rectSize * spacing, rectSize * spacing);
     }
 
   }
